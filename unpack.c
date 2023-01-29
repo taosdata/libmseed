@@ -1051,6 +1051,10 @@ msr3_data_bounds (MS3Record *msr, uint32_t *dataoffset, uint32_t *datasize)
   else if (msr->formatversion == 2)
   {
     *dataoffset = HO2u (*pMS2FSDH_DATAOFFSET (msr->record), msr->swapflag & MSSWAP_HEADER);
+    if(msr->reclen < *dataoffset){
+      ms_log (2, "data error:msr->reclen:%d < *dataoffset:%d \n", msr->reclen, *dataoffset);
+      return MS_GENERROR;
+    }
     *datasize = msr->reclen - *dataoffset;
   }
   else
